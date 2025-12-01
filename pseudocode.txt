@@ -1,0 +1,79 @@
+class state
+class solution
+solution == state therefore the "solution" needs to be extracted from a state and be a function?
+
+main {
+	x = 1 // The amount of times N-Queens Solution will run to calculate time taken.
+	total_time = 0
+	
+	for i = 0 to x
+	{
+		// Time for performance the n-queens
+		start_time = Start Timing;
+		solution = N-Queens(n);
+		end_time = end timing;
+		
+		OutputSolution(solution);
+		VerifySolution(solution);
+		
+		total_time += end_time - start_time;
+		
+		output the time taken for that solution. "N-Queens Run x: Time Taken: end_time - start_time;
+	}
+
+	average_time = total_time / x;
+	
+	output average_time;		
+
+}
+
+
+VerifySolution (solution)
+{
+
+	for every solution s1
+	{
+		for every solution s2 (s1 + 1)
+		{
+			check s1.row != s2.row;
+			check s1.column != s2.column;
+			check s1.diagonal != s2.diagonal;
+			
+			if one check fails, fail the output;
+			Change console text to red and output failure.
+			return false
+		}
+	}
+	return valid solution (ie true)
+}
+
+OutputSolution (solution)
+{
+	parse the solution and convert it to human readable form.
+}
+
+NQueens (n)
+{
+	instantiate state(n);
+	instantiate stack; // depth n 
+	
+	solution = f(state,stack); // recursive function running Nqueens -> a solution = state
+	
+	return solution
+}
+
+f (state, stack)
+{
+	if stack.depth == n : return state
+	
+	place queen in next available space.
+
+	// UPDATE MASKS AND DECIDE WHETHER EXIT OR NOT 
+	new_mask = mask with quuen
+	mask && new_mask != 0 = not valisd state, not goal state so prune branch and exit. 
+	mask = state.mask + update to mask (with new queen) -> 
+
+	// Do Recursive 
+	
+	
+}

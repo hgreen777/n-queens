@@ -3,28 +3,41 @@
 // Debug & Clean & Comment 
 // Produce Naive Solution -> Benchmark 
 // Implement for case >31 -> record and test 
+// Update the algorithm so x is gradually increased until average > 1minute
+
+// 1. Implement BitMask Solution to work with an arbitrary n>31.
+// 2. Verify all solutions and clean up. 
+// 3. Benchmark & Comment Code -> make it very readable
+// 4. Update the algorithm so x is gradually increased until average > 1minute
+
+// Solution is in an integer array format.
+
+// Need to explain how the board is stored. long[] and how it works.
+// How the operations work on it explaining bitwise operations
 
 public class F422436 
 {
 
-    static int sizeMask;
+    static long sizeMask;
+    
+    // Timing Variables
+    static int x = 1; // Number of time N-Queens will run.
+    static long totalTime = 0, startTime = 0, endTime = 0;
+    static long averageTime = 0;
+    
 
     public static void main(String[] args) 
     { 
         int n = Integer.parseInt(args[0]); // N-Queeens size 
-        sizeMask = (1 << n) - 1;
-
-        int x = 1; // Number of times n-queens will run.
-        long totalTime = 0; // System.currentPosrentTimeMillis();
 
         for (int i = 0; i < x; i++)
         {
             // Time performance of N-Queens
-            long startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
 
             int[] solution = NQueens(n);
 
-            long endTime = System.currentTimeMillis();
+            endTime = System.currentTimeMillis();
 
             // Verify & Output Solution.
             //VerifySolution(solution);
@@ -35,7 +48,9 @@ public class F422436
             System.out.println("N-Queens Run " + (i + 1) + ": Time Taken: " + (endTime - startTime) + " ms");
         }
 
-        long averageTime = totalTime / x;
+
+        // Workout the average and output if it passes the performance check (ie executes in under a minute).
+        averageTime = totalTime / x;
 
         System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ms");
 
@@ -54,7 +69,12 @@ public class F422436
     static int[] NQueens (int n) { 
         int[] positions = new int[n];
 
-        return dfs(positions, 0, 0, 0, 0, n);
+        // Setup the size mask to ensure it can work with any n not just 32.
+        int boardCount = ((int) Math.ceil(n / 32)) + 1; // how many 32 (long is 32 bits)
+        sizeMask = (1L << n) - 1;
+
+
+        return dfs(positions, 0L, 0L, 0L, 0, n);
     }
 
     static int[] dfs (int[] pos, long col, long diag1, long diag2, int row, int N)
@@ -112,6 +132,12 @@ public class F422436
                 }
             }
             System.out.println();
+        }
+
+        System.out.print("Queen Positions (x,y): ");
+        for (int i = 0; i < pos.length; i++)
+        {
+            System.out.print("(" + pos[i] + ", " + i + "), ");
         }
     };
     

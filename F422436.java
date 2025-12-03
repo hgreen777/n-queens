@@ -5,8 +5,8 @@
 // Implement for case >31 -> record and test 
 // Update the algorithm so x is gradually increased until average > 1minute
 
-// 1. Implement BitMask Solution to work with an arbitrary n>31.
-// 2. Verify all solutions and clean up. 
+// 1. Implement BitMask Solution to work with an arbitrary n>31. -> pending question -> avoid like the plague having to implement it. Will slow everything down and will not provide any performance upgrade.
+// 2. clean up. 
 // 3. Benchmark & Comment Code -> make it very readable
 // 4. Update the algorithm so x is gradually increased until average > 1minute
 
@@ -19,20 +19,27 @@ public class F422436
 {
 
     static long sizeMask;
-    
-    // Timing Variables
-    static int x = 1; // Number of time N-Queens will run.
-    static long totalTime = 0, startTime = 0, endTime = 0;
-    static long averageTime = 0;
-    
 
     public static void main(String[] args) 
     { 
-        int n = Integer.parseInt(args[0]); // N-Queeens size 
+        // Variable Initialisation
+        // n = N var for N-Queens, x = No. of times N-Queens will run for average.
+        int n, x;
+        // Timing variables.
+        long totalTime = 0, startTime = 0, endTime = 0, averageTime = 0;
 
+        // Try pull program args else set to a default val.
+        try {
+            n = Integer.parseInt(args[0]);
+            x = Integer.parseInt(args[1]);
+        } catch (Exception e) {
+            n = 12;
+            x = 10;
+        } 
+
+        // Run N-Queens X times and measure average performacne.
         for (int i = 0; i < x; i++)
         {
-            // Time performance of N-Queens
             startTime = System.currentTimeMillis();
 
             int[] solution = NQueens(n);
@@ -40,7 +47,7 @@ public class F422436
             endTime = System.currentTimeMillis();
 
             // Verify & Output Solution.
-            //VerifySolution(solution);
+            VerifySolution(solution); // Will throw error and "crash program" if N-Queens failed to find solution.
             OutputState(solution, n);
 
             totalTime += endTime - startTime;
@@ -52,7 +59,7 @@ public class F422436
         // Workout the average and output if it passes the performance check (ie executes in under a minute).
         averageTime = totalTime / x;
 
-        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ms");
+        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ms.");
 
         if (averageTime <= 60000)
         {
@@ -64,14 +71,31 @@ public class F422436
 
     }
 
-    //static void VerifySolution (State s) {};
+    static void VerifySolution (int[] s) 
+    {
+        for (int i = 0; i < (s.length - 1); i++)
+        {
+            for (int j = i+1; j < s.length; j++)
+            {
+                // Check if two queens are in the same column
+                if (s[i] == s[j]) {
+                    throw new IllegalStateException("Queens in the same column at rows " + i + " and " + j);
+                }
+                // Check if two queens are in the same diagonal
+                if (Math.abs(s[i] - s[j]) == Math.abs(i - j)) {
+                    throw new IllegalStateException("Queens in the same diagonal at rows " + i + " and " + j);
+                }
+            }
+        }
+    };
 
     static int[] NQueens (int n) { 
+
         int[] positions = new int[n];
 
-        // Setup the size mask to ensure it can work with any n not just 32.
-        int boardCount = ((int) Math.ceil(n / 32)) + 1; // how many 32 (long is 32 bits)
-        sizeMask = (1L << n) - 1;
+        // Setup the size mask to ensure it can work with any n not just 64.
+        sizeMask = (1 << n) - 1; // Optimisation for n significantly smaller then 64 -> casts to int.
+        if (n > 31) sizeMask = (1L << n) - 1;
 
 
         return dfs(positions, 0L, 0L, 0L, 0, n);
@@ -85,12 +109,11 @@ public class F422436
             // All queens have been placed. We only need 1 solution so return.
             return pos;
         } 
-        
-        // find adjacent nodes (nodes on frontier) (ie valid nodes)
+ 
+        // find nodes on frontier (all free spaces not attacked by queen)
         long free = ~(col | diag1 | diag2) & sizeMask;
 
 
-        // for all adjacent nodes 
         while (free != 0)
         {
             long currentPos = free & -free;
@@ -100,10 +123,16 @@ public class F422436
             // record the placement (will be overwritten if wrong)
             pos[row] = Long.numberOfTrailingZeros(currentPos);
 
-            //dfs newNode, depth + 1 
-            int[] result = dfs(pos, col | currentPos,
-               (diag1 | currentPos) << 1,
-               (diag2 | currentPos) >> 1, row +1, N);
+
+            // Runs with current bitmasks + currentlyTesting Position
+            int[] result = dfs(
+                pos, 
+                col | currentPos,  
+                (diag1 | currentPos) << 1,
+                (diag2 | currentPos) >> 1, 
+                row + 1, // Depth
+                N
+            );
 
             if (result != null)
             {
@@ -111,8 +140,7 @@ public class F422436
             }
         }
 
-        // Error -> Unsolvable? Return empty array.
-        //return new int[N];
+        // Error -> Unsolvable? Will cause error and program to crash.
         return null;
     } 
 
@@ -139,6 +167,8 @@ public class F422436
         {
             System.out.print("(" + pos[i] + ", " + i + "), ");
         }
+
+        System.out.println();
     };
     
 }

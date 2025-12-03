@@ -77,3 +77,34 @@ f (state, stack)
 	
 	
 }
+
+To switch to long[] need to change the inital call.
+line 91 long free = ~(col | diag1 | diag2) & sizeMask;
+long currentPos = free & -free;
+free -= currentPos;
+pos[row] = Long.numberOfTrailingZeros(currentPos);
+
+            //dfs newNode, depth + 1 
+            int[] result = dfs(pos, col | currentPos,
+               (diag1 | currentPos) << 1,
+               (diag2 | currentPos) >> 1, row +1, N);
+
+Question: what if my algorithm is efficient to give very fast times but will break when n>64. Does it have to work for n>64. But it does not matter as fails performance at n~35.
+Can i have it switch to just a naive approach at >64 ie 2 DFS to work with n>64 instead of failing but it will likely never solve. 
+use seperaste dfs entirely for n >64.
+
+static long[] calculateFreePositions (long[] col, long[] diag1, long[] diag2, int boardCount)
+{
+	long[] free = new long[boardCount];
+
+	for (int i = 0; i < boardCount; i++)
+	{
+		if (i == boardCount - 1)
+		{
+			free[i] = ~(col[i] | diag1 | diag2) & sizeMask;
+		} else
+		{
+			free[i] = ~(col[i] | diag1 | diag2);
+		}
+	}
+}

@@ -1,11 +1,8 @@
 // Performance DFS to solve the N-Queens Problem
 // Works up to N=31
 // Debug & Clean & Comment 
-// Produce Naive Solution -> Benchmark 
-// Implement for case >31 -> record and test 
-// Update the algorithm so x is gradually increased until average > 1minute
 
-// 1. Implement BitMask Solution to work with an arbitrary n>31. -> pending question -> avoid like the plague having to implement it. Will slow everything down and will not provide any performance upgrade.
+
 // 2. clean up. 
 // 3. Benchmark & Comment Code -> make it very readable
 // 4. Update the algorithm so x is gradually increased until average > 1minute
@@ -34,7 +31,7 @@ public class F422436
             x = Integer.parseInt(args[1]);
         } catch (Exception e) {
             n = 12;
-            x = 10;
+            x = 1;
         } 
 
         // Run N-Queens X times and measure average performacne.

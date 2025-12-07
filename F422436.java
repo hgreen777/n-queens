@@ -23,12 +23,19 @@ public class F422436
         // n = N var for N-Queens, x = No. of times N-Queens will run for average.
         int n, x;
         // Timing variables.
-        long totalTime = 0, startTime = 0, endTime = 0, averageTime = 0;
+        long totalTime = 0, startTime = 0, endTime = 0, averageTime = 0, instanceTime = 0, minTime = 0, maxTime = 0;
 
         // Try pull program args else set to a default val.
         try {
-            n = Integer.parseInt(args[0]);
-            x = Integer.parseInt(args[1]);
+            if (args.length == 2)
+            {
+                n = Integer.parseInt(args[0]);
+                x = Integer.parseInt(args[1]);
+            } else
+            {
+                n = Integer.parseInt(args[0]);
+                x = 1;
+            }
         } catch (Exception e) {
             n = 12;
             x = 1;
@@ -47,16 +54,33 @@ public class F422436
             VerifySolution(solution); // Will throw error and "crash program" if N-Queens failed to find solution.
             OutputState(solution, n);
 
-            totalTime += endTime - startTime;
+            instanceTime = endTime - startTime;
+            totalTime += instanceTime;
 
-            System.out.println("N-Queens Run " + (i + 1) + ": Time Taken: " + (endTime - startTime) + " ms");
+            if (i == 0) 
+            {
+                maxTime = instanceTime;
+                minTime = instanceTime;
+            }
+            else if (instanceTime > maxTime)
+            {
+                maxTime = instanceTime;
+            }
+
+            if (instanceTime < minTime)
+            {
+                minTime = instanceTime;
+            }
+
+
+            System.out.println("N-Queens Run " + (i + 1) + ": Time Taken: " + instanceTime + " ms");
         }
 
 
         // Workout the average and output if it passes the performance check (ie executes in under a minute).
         averageTime = totalTime / x;
 
-        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ms.");
+        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ms. Minimum Time: " + instanceTime + "ms. Maximimum Time : " + maxTime + "ms.");
 
         if (averageTime <= 60000)
         {

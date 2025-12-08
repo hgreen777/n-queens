@@ -1,6 +1,22 @@
 // DFS to solve the N-Queens Problem for 25COB107
 /*
-DS explanation
+The following explains the Data structures, input and output for the N-Queens algorithm, this is the same as for section a.
+Data Structure: 
+    Assessing what locations are available (empty spaces not under threat by a queen) and for storing a “state”, longs are used as the data structure within the algorithm. This allows for 64bits (in java standards) of data to be used to store a state. 
+    A “state” is stored through keeping track of columns, diagonals (\) and anti-diagonals (/) not a full board. The solutions array of integer is the best representation of the board and location of a queen.
+    This works by when a queen is placed in column x, bit x in column’s long is set to 1. Similarly, the x’th bit in diagonal and anti-diagonal is also set to 1 for column x. 
+    When making the next recursive call, and going down a row in the DFS, the diagonal long is shifted by 1 bit, this will mean when checking available spaces on the next row (due to the shifting) it will show the available columns not under threat by a diagonal. 
+    Furthermore, this means using bitwise operations the nodes on the frontier which are not invalid states can be found simply by combining the column and diagonal bitmasks (including the size bitmask). 
+    The size bitmask ensures that the for n < 64 where the whole long will not be used, the algorithm still works as all bits up to n will be 1.
+
+Input: 
+    The input to this algorithm is simply N, the algorithm will generate/instantiate any necessary further inputs.
+Output: 
+    The output of the N-Queens will be an array of size n (also where each cell is associated to a row), where each cell will contain an int which is the location (column) of the queen for that row. 
+    This can be processed into a more human-readable format by going through the whole array and putting it into format (cell entry, row (cell index)). 
+    For the java program, the output function has been expanded to include a visual representation of the board with the queens placed in it, so solutions can be verified manually as well as in the program to ensure they are right (a screenshot example is in section c).  
+    Eg for n=4 : Queen Positions (x,y): (1, 0), (3, 1), (0, 2), (2, 3). The positions for the board are 0-indexed.
+
 */
 
 public class F422436 

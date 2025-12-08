@@ -93,7 +93,7 @@ public class F422436
 
         averageTime = totalTime / x;
 
-        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ns. Minimum Time: " + instanceTime + "ns. Maximimum Time : " + maxTime + "ns.");
+        System.out.println("N-Queens Average for N=" + n + ": " + averageTime + " ns. Minimum Time: " + minTime + "ns. Maximimum Time : " + maxTime + "ns.");
 
 
         if (averageTime <= 60000000000L) // check if smaller then 1 min in nanoseconds. 

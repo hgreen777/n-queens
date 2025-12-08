@@ -1,5 +1,7 @@
 // DFS to solve the N-Queens Problem for 25COB107
-
+/*
+DS explanation
+*/
 
 public class F422436 
 {
@@ -120,7 +122,7 @@ public class F422436
         while (free != 0)
         {
             long currentPos = free & -free; // Isolate LSB.
-            free -= currentPos; // Removes from free to prevent infinite loop.
+            free -= currentPos; // Set node as visited. 
 
 
             // record the placement (will be overwritten if wrong). depth == row.
